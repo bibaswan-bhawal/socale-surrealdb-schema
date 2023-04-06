@@ -1,7 +1,7 @@
 import Surreal from 'surrealdb.js';
 import dotenv from 'dotenv';
 
-import { interests_list } from './data/interests.js';
+import { clubs_list } from './data/ucsd/clubs.js';
 
 dotenv.config();
 
@@ -9,19 +9,16 @@ const db = new Surreal(`${process.env.SURREALDB_URL}/rpc`);
 
 async function main() {
     try {
-        console.log('Connecting to SurrealDB...');
-
         // Sign in to SurrealDB
         await db.signin({ user: process.env.SURREALDB_USERNAME, pass: process.env.SURREALDB_PASSWORD });
 
-        console.log('Connected to SurrealDB!');
         // Use the dev namespace and the app database
-        await db.use('dev', 'app');
+        await db.use('dev', 'yw3rjh7mgbfnosdnl5mi');
 
-        for (let interest of interests_list) {
-            let created = await db.query(`CREATE interests CONTENT {
-                name: "${interest['interest']}",
-                category: "${interest['category']}"
+        for (let club of clubs_list) {
+            let created = await db.query(`CREATE clubs CONTENT {
+                name: "${club['name']}",
+                category: "${club['type']}"
             }`);
 
             JSON.stringify(created);
